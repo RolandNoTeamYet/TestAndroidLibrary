@@ -31,40 +31,22 @@ android {
         jvmTarget = '11'
     }
 
-    plugins.withType(JavaPlugin).whenPluginAdded {
-        sourceCompatibility = 11
-        targetCompatibility = 11
-
-        //Repos to use
-        repositories {
-            mavenLocal()
-            mavenCentral()
-        }
-
-        //Allows deploying to local repo
-        project.plugins.apply('maven-publish')
-
+    afterEvaluate {
         publishing {
             publications {
                 mavenJava(MavenPublication) {
-
-                    groupId 'group'
-                    artifactId project.name
-                    version '0.1.7'
-
-                    /*
-                     Disabling "from components.java" means that the
-                     publishMavenJavaPublicationToMavenLocal
-                     task is available on all modules but the jar
-                     is not published :(
-                   */
-
-                    from components.java
+                    if (project.plugins.hasPlugin('war')) {
+                        from components.web
+                    } else if (project.plugins.hasPlugin('java')) {
+                        from components.java
+                    }
+                    groupId = 'foo'
+                    artifactId = 'bar'
+                    version = '0.1'
 
                 }
             }
         }
-
     }
 }
 
@@ -78,5 +60,5 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0"
 }
