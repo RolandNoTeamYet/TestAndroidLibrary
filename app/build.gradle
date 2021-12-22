@@ -30,6 +30,19 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
+
+    afterEvaluate {
+        publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    groupId = 'foo'
+                    artifactId = 'bar'
+                    version = '0.1'
+
+                }
+            }
+        }
+    }
 }
 
 dependencies {
